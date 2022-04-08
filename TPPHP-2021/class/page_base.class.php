@@ -140,6 +140,10 @@ class page_base {
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a class="nav-link"   href="'.$this->path.'/Accueil" >Accueil </a></li>
 				</ul>
+
+				<ul class="navbar-nav">
+					<li class="nav-item active"><a class="nav-link"   href="'.$this->path.'/lesarticles" >Articles </a></li>
+				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a class="nav-link"   href="'.$this->path.'/Departement" >Departement </a></li>

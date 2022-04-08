@@ -45,6 +45,12 @@
 			$site->global=$controleur->caroussel();
 			$site->affiche();
 			break;
+		case 'lesarticles':
+			$site->titre='Articles';
+			$site-> right_sidebar=$site->rempli_right_sidebar();
+			$site-> left_sidebar=$controleur->retourne_article($site->titre);
+			$site->affiche();
+			break;
 		case 'connexion' :
 			$site->titre='Connexion';
 			$site->js='jquery.validate.min';

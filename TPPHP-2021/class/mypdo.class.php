@@ -45,6 +45,7 @@ class mypdo extends PDO{
    		}
     	return null;
     }
+
     public function liste_dep()
     {
     
@@ -205,23 +206,47 @@ class mypdo extends PDO{
     	.'date_fin='.$this->connexion ->quote($tab['date_fin']) .','
     	.'corps='.$this->connexion ->quote($corps) 
  		.' where id='.$_SESSION['id_article'] .';';
+		try {
+     		$nblignes=$this->connexion -> exec($requete);
+    		if ($nblignes !=1)
+    		{
+    			$errors['requete']='Pas de modifications d\'article :'.$requete;
+    		}
 
-     $nblignes=$this->connexion -> exec($requete);
-    if ($nblignes !=1)
-    {
-    	$errors['requete']='Pas de modifications d\'article :'.$requete;
-    }
-    
-    
-    
-    	if ( ! empty($errors)) {
-    		$data['success'] = false;
-    		$data['errors']  = $errors;
-    	} else {
-    
-    		$data['success'] = true;
-    		$data['message'] = 'Modification article ok!';
-    	}
+			if ($nblignes == false)
+			{
+				$errors = $this->connexion->errorInfo();
+				// $error[0] SIGNAL SQLSTATE ou sql, $error[1] erreur sql , error[2] message erreur trigger
+				if ($errors[0]==45000) 
+				{ 
+					$data['success'] = false;
+					$data['errors'] = $errors[2];
+				} 
+				else
+				{
+					$data['success'] = false;
+					$data['errors'] = $errors[2];
+				}
+    		}
+			if (!empty($errors))
+			{
+				$data['success'] = false;
+				$data['errors']  = $errors;
+			}
+    		else 
+			{
+        		// l'execution est ok
+				$data['success'] = true;
+    			$data['message'] = 'Modification article ok!';
+    		}
+		}
+		catch (PDOException $e) 
+		{
+			$data['success'] = false;
+			$data['errors'] = $e->getMessage();
+		}
+
+    	
     	return $data;
     }
 
@@ -270,6 +295,53 @@ class mypdo extends PDO{
 		}
 		return null;
 	}
+
+
+	public function insererPage($id,$titre,$h1)
+	{
+		$requete = 'insert into page VALUES ('.$id.',"'.$titre.'","'.$h1.'")';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
+
+	public function supprimerPage($id)
+	{
+		$requete = 'delete from page where id = '.$id.'';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
+
+	public function insererPublication($idArticle,$idPage,$numOrdre)
+	{
+		$requete = 'insert into publication VALUES ('.$idArticle.','.$idPage.','.$numOrdre.')';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
+
+	public function supprimerPublication($idArticle, $idPage)
+	{
+		$requete = 'delete from publication where idArticle = '.$idArticle.' and idPage = '.$idPage.'';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
+	public function insererArticle($id,$h3,$corps,$date_deb,$date_fin,$publie,$salarie)
+	{
+		$requete = 'insert into article (id,h3,corps,date_deb,date_fin,publie,salarie) VALUES ('.$id.',"'.$h3.'","'.$corps.'","'.$date_deb.'","'.$date_fin.'",'.$publie.','.$salarie.')';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
+	public function supprimerArticle($id)
+	{
+		$requete = 'delete from article where id = '.$id.'';
+		$result = $this->connexion->prepare($requete);
+		$result->execute();
+	}
+
 
     
 }
