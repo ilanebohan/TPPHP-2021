@@ -7,3 +7,5 @@ Architecture MVC.
 D.B : MySQL.
 
 Fait et utilisé à but d'apprentissage uniquement.
+
+![Your Repository's Stats](https://github-readme-stats.vercel.app/api/top-langs/?username=ilanebohan&theme=blue-green)
